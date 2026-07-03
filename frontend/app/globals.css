@@ -102,10 +102,19 @@ body {
   color: var(--text-muted);
 }
 
+.gridpulse-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+}
+
 .gridpulse-wordmark {
-  margin-left: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  line-height: 1;
 }
 
 .gridpulse-wordmark-accent {
@@ -347,7 +356,7 @@ body {
 }
 
 .landing-title {
-  margin-top: 1rem;
+  margin-top: 1.25rem;
   max-width: 14ch;
   font-size: clamp(2rem, 5vw, 3.25rem);
   font-weight: 600;
@@ -361,11 +370,19 @@ body {
 }
 
 .landing-lead {
-  margin-top: 1.25rem;
+  margin-top: 1.5rem;
   max-width: 42rem;
   font-size: 1.0625rem;
   line-height: 1.65;
   color: var(--text-secondary);
+}
+
+.landing-hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
 }
 
 .stack-pills {
@@ -374,7 +391,7 @@ body {
   gap: 0.5rem;
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 3rem 0 0;
 }
 
 .stack-pill {
@@ -385,6 +402,12 @@ body {
   font-size: 0.75rem;
   font-weight: 500;
   color: var(--text-muted);
+}
+
+.landing-modules {
+  margin-top: 1rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--surface-border);
 }
 
 .feature-grid {

@@ -15,8 +15,10 @@ import {
 
 import type { CarbonPoint, MixPoint } from "@/lib/api";
 
-function formatHour(iso: string) {
+function formatChartTime(iso: string) {
   return new Intl.DateTimeFormat("fr-FR", {
+    day: "2-digit",
+    month: "2-digit",
     hour: "2-digit",
     minute: "2-digit",
     timeZone: "Europe/Paris",
@@ -25,7 +27,7 @@ function formatHour(iso: string) {
 
 export function CarbonChart({ points }: { points: CarbonPoint[] }) {
   const data = points.map((p) => ({
-    time: formatHour(p.recorded_at),
+    time: formatChartTime(p.recorded_at),
     carbon: p.carbon_gco2_kwh,
   }));
 
@@ -72,7 +74,7 @@ const MIX_COLORS = {
 
 export function MixStackChart({ points }: { points: MixPoint[] }) {
   const data = points.map((p) => ({
-    time: formatHour(p.recorded_at),
+    time: formatChartTime(p.recorded_at),
     Nucléaire: p.nuclear_pct,
     Éolien: p.wind_pct,
     Solaire: p.solar_pct,
@@ -162,17 +164,33 @@ export function ForecastChart({
   history: CarbonPoint[];
   forecasts: { forecast_for: string; value: number }[];
 }) {
-  const historyData = history.map((p) => ({
-    time: formatHour(p.recorded_at),
-    kind: "history" as const,
-    carbon: p.carbon_gco2_kwh,
+  const lastHistory = history.at(-1);
+  const forecastSlice = forecasts.slice(0, 12);
+
+  const historyRows = history.map((p) => ({
+    time: formatChartTime(p.recorded_at),
+    actual: p.carbon_gco2_kwh,
+    predicted: null as number | null,
   }));
-  const forecastData = forecasts.map((p) => ({
-    time: formatHour(p.forecast_for),
-    kind: "forecast" as const,
-    carbon: p.value,
+
+  const bridge =
+    lastHistory && forecastSlice[0]
+      ? [
+          {
+            time: formatChartTime(forecastSlice[0].forecast_for),
+            actual: lastHistory.carbon_gco2_kwh,
+            predicted: forecastSlice[0].value,
+          },
+        ]
+      : [];
+
+  const forecastRows = forecastSlice.slice(bridge.length ? 1 : 0).map((p) => ({
+    time: formatChartTime(p.forecast_for),
+    actual: null as number | null,
+    predicted: p.value,
   }));
-  const data = [...historyData, ...forecastData];
+
+  const data = [...historyRows, ...bridge, ...forecastRows];
 
   return (
     <div className="chart-card">
@@ -181,7 +199,12 @@ export function ForecastChart({
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--surface-border)" />
-            <XAxis dataKey="time" tick={{ fontSize: 11 }} stroke="var(--text-muted)" />
+            <XAxis
+              dataKey="time"
+              tick={{ fontSize: 10 }}
+              stroke="var(--text-muted)"
+              interval="preserveStartEnd"
+            />
             <YAxis unit=" g" tick={{ fontSize: 11 }} stroke="var(--text-muted)" />
             <Tooltip
               contentStyle={{
@@ -190,14 +213,25 @@ export function ForecastChart({
                 borderRadius: 8,
               }}
             />
+            <Legend />
             <Line
               type="monotone"
-              dataKey="carbon"
-              name="gCO₂/kWh"
+              dataKey="actual"
+              name="Historique"
               stroke="#059669"
               strokeWidth={2}
               dot={false}
-              connectNulls
+              connectNulls={false}
+            />
+            <Line
+              type="monotone"
+              dataKey="predicted"
+              name="Prévision"
+              stroke="#0891b2"
+              strokeWidth={2}
+              strokeDasharray="6 4"
+              dot={false}
+              connectNulls={false}
             />
           </LineChart>
         </ResponsiveContainer>

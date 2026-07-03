@@ -1,4 +1,5 @@
 import { CarbonChart, MixStackChart } from "@/components/EnergyCharts";
+import { DashboardIcon } from "@/components/ModuleIcons";
 import { PageHeader } from "@/components/PageHeader";
 import { StatGrid } from "@/components/StatGrid";
 import { SyncBadge } from "@/components/SyncBadge";
@@ -32,6 +33,7 @@ export default async function DashboardPage() {
         title="Dashboard énergie"
         description="Mix électrique RTE et intensité carbone Electricity Maps — données agrégées, démo portfolio non réglementaire."
         accent="#059669"
+        icon={<DashboardIcon />}
         actions={
           <SyncBadge label="Sync" recordedAt={latestSync} />
         }

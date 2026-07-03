@@ -1,4 +1,5 @@
 import { ForecastChart } from "@/components/EnergyCharts";
+import { ForecastIcon } from "@/components/ModuleIcons";
 import { PageHeader } from "@/components/PageHeader";
 import { StatGrid } from "@/components/StatGrid";
 import { getCarbon, getForecasts } from "@/lib/api";
@@ -19,7 +20,7 @@ export default async function ForecastPage() {
     error = e instanceof Error ? e.message : "Erreur API";
   }
 
-  const latestForecast = forecasts[0]?.value;
+  const latestForecast = forecasts.at(-1)?.value ?? forecasts[0]?.value;
 
   return (
     <div>
@@ -28,6 +29,7 @@ export default async function ForecastPage() {
         title="Prévision carbone"
         description="Moyenne mobile 24 h sur l'intensité carbone — modèle pédagogique, pas opérationnel RTE."
         accent="#0891b2"
+        icon={<ForecastIcon />}
       />
 
       <div className="disclaimer-card">
