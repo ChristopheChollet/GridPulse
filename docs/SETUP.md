@@ -11,7 +11,8 @@ Checklist dans l’ordre. Coche au fur et à mesure.
 3. Attendre que le projet soit **Active**
 4. **SQL Editor** → **New query** → coller tout le contenu de  
    `supabase/migrations/001_initial.sql` → **Run**
-5. Vérifier : **Table Editor** → tables `grid_mix_points`, `carbon_intensity_points`, `forecasts`
+5. Répéter pour `supabase/migrations/002_ingest_runs.sql` (historique ingest / page Statut)
+6. Vérifier : **Table Editor** → tables `grid_mix_points`, `carbon_intensity_points`, `forecasts`, `ingest_runs`
 
 ### Récupérer les clés
 

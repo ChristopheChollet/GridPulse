@@ -34,6 +34,46 @@ export type ForecastPoint = {
   model: string;
 };
 
+export type GreenWindow = {
+  start_at: string;
+  end_at: string;
+  avg_carbon_gco2_kwh: number;
+  avg_renewable_pct: number;
+  score: number;
+};
+
+export type GreenWindows = {
+  window_hours: number;
+  best_window: GreenWindow | null;
+  slots: {
+    hour: string;
+    carbon_gco2_kwh: number;
+    renewable_pct: number;
+    score: number;
+  }[];
+  hint: string;
+};
+
+export type IngestRun = {
+  id: number;
+  run_at: string;
+  mix_upserted: number;
+  carbon_upserted: number;
+  errors: string[];
+  success: boolean;
+};
+
+export type PipelineStatus = {
+  counts: {
+    grid_mix_points: number;
+    carbon_intensity_points: number;
+    forecasts: number;
+  };
+  latest_mix_at: string | null;
+  latest_carbon_at: string | null;
+  last_ingest: IngestRun | null;
+};
+
 async function fetchJson<T>(path: string): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     next: { revalidate: 300 },
@@ -60,6 +100,16 @@ export function getForecasts(metric = "carbon_intensity") {
   return fetchJson<{ forecasts: ForecastPoint[] }>(
     `/api/v1/forecasts?metric=${metric}`,
   );
+}
+
+export function getGreenWindows(hours = 24, window = 6) {
+  return fetchJson<GreenWindows>(
+    `/api/v1/green-windows?hours=${hours}&window=${window}`,
+  );
+}
+
+export function getStatus() {
+  return fetchJson<PipelineStatus>("/api/v1/status");
 }
 
 export function formatTime(iso: string | null | undefined) {

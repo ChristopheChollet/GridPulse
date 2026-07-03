@@ -17,9 +17,6 @@ export function SiteHeader() {
         <div className="flex items-center gap-2 sm:gap-3">
           <NavLinks />
           <ThemeToggle />
-          <Link href="/dashboard" className="btn-primary hidden px-4 py-2 text-sm sm:inline-flex">
-            Dashboard
-          </Link>
         </div>
       </div>
     </header>

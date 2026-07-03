@@ -26,7 +26,7 @@ Electricity Maps ──────┘
 ### 1. Supabase
 
 1. Créer un projet Supabase dédié GridPulse
-2. Exécuter [`supabase/migrations/001_initial.sql`](supabase/migrations/001_initial.sql) dans le SQL Editor
+2. Exécuter [`supabase/migrations/001_initial.sql`](supabase/migrations/001_initial.sql) puis [`002_ingest_runs.sql`](supabase/migrations/002_ingest_runs.sql) dans le SQL Editor
 
 ### 2. Variables d'environnement
 
@@ -80,6 +80,28 @@ docker compose up
 | `GET /api/v1/mix?hours=24` | Points mix RTE |
 | `GET /api/v1/carbon?hours=24` | Intensité carbone |
 | `GET /api/v1/forecasts?metric=carbon_intensity` | Prévisions |
+| `GET /api/v1/green-windows?hours=24&window=6` | Meilleure fenêtre bas-carbone / renouvelable |
+| `GET /api/v1/status` | Compteurs, dernière sync, dernier run ingest |
+
+## V2 (dashboard avancé) — livré
+
+- **Créneaux verts** — widget « meilleure fenêtre 6 h » sur `/dashboard`
+- **Export PDF / CSV** — boutons dans l'en-tête du dashboard (pdf-lib)
+- **Page `/status`** — volumes en base, dernière ingestion, erreurs pipeline
+
+## V3 (optionnel — plus tard)
+
+> Non bloquant pour le portfolio. Priorité après deploy + captures : ship V2 en prod.
+
+| Idée | Description | Intérêt |
+|------|-------------|---------|
+| **Prévision ML** | Remplacer / compléter la moyenne mobile 24 h par un modèle scikit-learn (features horaires, jour/semaine) | Plus crédible côté data science en entretien |
+| **Alertes** | Seuil carbone configurable → webhook Slack / email si dépassement | Angle ops / monitoring |
+| **Multi-zone** | DE, ES, GB via Electricity Maps (sélecteur zone) | Élargit le scope sans refonte |
+| **Pont GreenOps** | Lien narratif ou API légère : créneau vert GridPulse → suggestion flex GreenOps | Story GreenChain unifiée |
+| **Temps réel** | SSE ou polling court sur `/dashboard` (refresh auto sans reload) | UX plus « live » |
+
+Ordre suggéré si V3 un jour : **ML** → **alertes** → reste selon envie.
 
 ## Déploiement
 

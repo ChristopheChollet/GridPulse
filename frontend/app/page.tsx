@@ -3,7 +3,7 @@ import { HeroLivePreview } from "@/components/HeroLivePreview";
 import {
   DashboardIcon,
   ForecastIcon,
-  PipelineIcon,
+  StatusIcon,
 } from "@/components/ModuleIcons";
 import { getRepoUrl } from "@/lib/site";
 
@@ -11,25 +11,28 @@ export const dynamic = "force-dynamic";
 
 const features = [
   {
-    accent: "#059669",
-    title: "Pipeline data",
-    icon: PipelineIcon,
-    description:
-      "FastAPI ingère le mix RTE (open data ODRE) et l'intensité carbone Electricity Maps vers Supabase, toutes les heures.",
-  },
-  {
     accent: "#0891b2",
-    title: "Dashboard temps réel",
+    href: "/dashboard",
+    title: "Dashboard",
     icon: DashboardIcon,
     description:
-      "KPIs, courbe carbone 24 h et mix empilé — lecture publique, sans auth, déployé pour la démo portfolio.",
+      "KPIs, courbe carbone 24 h, mix empilé, créneau vert 6 h et export PDF/CSV — lecture publique, démo portfolio.",
   },
   {
     accent: "#7c3aed",
-    title: "Prévision baseline",
+    href: "/forecast",
+    title: "Prévision",
     icon: ForecastIcon,
     description:
       "Moyenne mobile 24 h sur l'intensité carbone — modèle pédagogique, assumé comme baseline et non opérationnel RTE.",
+  },
+  {
+    accent: "#d97706",
+    href: "/status",
+    title: "Statut",
+    icon: StatusIcon,
+    description:
+      "Observabilité du pipeline : ingest RTE + Electricity Maps, volumes en base, dernière sync et erreurs — cron horaire côté backend.",
   },
 ] as const;
 
@@ -57,9 +60,9 @@ export default function HomePage() {
             <span className="landing-title-accent">&amp; carbone FR</span>
           </h1>
           <p className="landing-lead">
-            GridPulse agrège RTE et Electricity Maps : ingestion horaire, historique
-            en base, KPIs et graphiques — le complément data de GreenOps, sans
-            blockchain.
+            GridPulse agrège RTE et Electricity Maps : ingestion horaire, dashboard,
+            créneaux verts, exports et statut pipeline — le complément data de
+            GreenOps, sans blockchain.
           </p>
           <div className="landing-hero-cta">
             <Link href="/dashboard" className="btn-primary px-6 py-2.5 text-sm">
@@ -88,22 +91,28 @@ export default function HomePage() {
       <section className="landing-modules motion-fade-up motion-stagger-2" aria-labelledby="features-heading">
         <p className="text-xs font-medium uppercase tracking-widest text-muted">Modules</p>
         <h2 id="features-heading" className="mt-2 text-xl font-semibold text-primary">
-          Pipeline, visualisation, prévision
+          Les trois pages du produit
         </h2>
-        <ul className="feature-grid mt-8">
+        <p className="landing-modules-lead">
+          Même entrées que la navigation — le pipeline data (FastAPI + cron) n&apos;a
+          pas de page dédiée : il se pilote et s&apos;observe via Statut.
+        </p>
+        <ul className="feature-grid">
           {features.map((f) => {
             const Icon = f.icon;
             return (
-            <li key={f.title} className="feature-card">
-              <span
-                className="feature-card-icon"
-                style={{ color: f.accent, backgroundColor: `${f.accent}14` }}
-                aria-hidden
-              >
-                <Icon />
-              </span>
-              <h3 className="feature-card-title">{f.title}</h3>
-              <p className="feature-card-desc">{f.description}</p>
+            <li key={f.title}>
+              <Link href={f.href} className="feature-card feature-card-link">
+                <span
+                  className="feature-card-icon"
+                  style={{ color: f.accent, backgroundColor: `${f.accent}14` }}
+                  aria-hidden
+                >
+                  <Icon />
+                </span>
+                <h3 className="feature-card-title">{f.title}</h3>
+                <p className="feature-card-desc">{f.description}</p>
+              </Link>
             </li>
             );
           })}

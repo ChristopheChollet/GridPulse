@@ -1,9 +1,11 @@
 import { CarbonChart, MixStackChart } from "@/components/EnergyCharts";
+import { DashboardExport } from "@/components/DashboardExport";
+import { GreenWindowCard } from "@/components/GreenWindowCard";
 import { DashboardIcon } from "@/components/ModuleIcons";
 import { PageHeader } from "@/components/PageHeader";
 import { StatGrid } from "@/components/StatGrid";
 import { SyncBadge } from "@/components/SyncBadge";
-import { formatTime, getCarbon, getMix, getSummary } from "@/lib/api";
+import { formatTime, getCarbon, getGreenWindows, getMix, getSummary } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
@@ -11,14 +13,12 @@ export default async function DashboardPage() {
   let summary = null;
   let mixPoints: Awaited<ReturnType<typeof getMix>>["points"] = [];
   let carbonPoints: Awaited<ReturnType<typeof getCarbon>>["points"] = [];
+  let greenWindows: Awaited<ReturnType<typeof getGreenWindows>> | null = null;
   let error: string | null = null;
 
   try {
-    [summary, { points: mixPoints }, { points: carbonPoints }] = await Promise.all([
-      getSummary(),
-      getMix(24),
-      getCarbon(24),
-    ]);
+    [summary, { points: mixPoints }, { points: carbonPoints }, greenWindows] =
+      await Promise.all([getSummary(), getMix(24), getCarbon(24), getGreenWindows(24, 6)]);
   } catch (e) {
     error = e instanceof Error ? e.message : "Erreur API";
   }
@@ -35,7 +35,20 @@ export default async function DashboardPage() {
         accent="#059669"
         icon={<DashboardIcon />}
         actions={
-          <SyncBadge label="Sync" recordedAt={latestSync} />
+          <div className="flex flex-wrap items-center gap-3">
+            {summary && greenWindows ? (
+              <DashboardExport
+                report={{
+                  generatedAt: new Date(),
+                  summary,
+                  mixPoints,
+                  carbonPoints,
+                  greenWindows,
+                }}
+              />
+            ) : null}
+            <SyncBadge label="Sync" recordedAt={latestSync} />
+          </div>
         }
       />
 
@@ -87,6 +100,7 @@ export default async function DashboardPage() {
 
       {hasData ? (
         <div className="mt-8 space-y-6">
+          {greenWindows ? <GreenWindowCard data={greenWindows} /> : null}
           {carbonPoints.length > 0 ? (
             <section aria-labelledby="carbon-chart-title">
               <CarbonChart points={carbonPoints} />

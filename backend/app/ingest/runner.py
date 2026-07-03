@@ -10,6 +10,21 @@ from app.db.client import get_supabase
 from app.ingest import electricity_maps, rte
 
 
+def _log_ingest_run(result: "IngestResult") -> None:
+    try:
+        client = get_supabase()
+        client.table("ingest_runs").insert(
+            {
+                "mix_upserted": result.mix_upserted,
+                "carbon_upserted": result.carbon_upserted,
+                "errors": result.errors,
+                "success": len(result.errors) == 0,
+            }
+        ).execute()
+    except Exception:  # noqa: BLE001
+        pass  # table may not exist yet on fresh installs
+
+
 @dataclass
 class IngestResult:
     mix_upserted: int
@@ -60,8 +75,10 @@ async def run_ingestion() -> IngestResult:
     else:
         errors.append("electricity_maps: ELECTRICITY_MAPS_TOKEN not set")
 
-    return IngestResult(
+    result = IngestResult(
         mix_upserted=mix_count,
         carbon_upserted=carbon_count,
         errors=errors,
     )
+    _log_ingest_run(result)
+    return result
