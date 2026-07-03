@@ -3,9 +3,10 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Always load backend/.env regardless of cwd (uvicorn launch directory)
+# Local dev only — never override platform env (Railway, etc.)
 _ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
-load_dotenv(_ENV_PATH, override=True)
+if _ENV_PATH.is_file():
+    load_dotenv(_ENV_PATH, override=False)
 
 
 def get_settings() -> dict[str, str | None]:

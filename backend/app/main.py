@@ -15,6 +15,14 @@ app = FastAPI(
 settings = get_settings()
 origins = [o.strip() for o in str(settings["cors_origins"]).split(",") if o.strip()]
 
+
+def _check_ingest_secret(provided: str | None) -> None:
+    secret = (get_settings().get("ingest_secret") or "").strip()
+    if not secret:
+        return
+    if (provided or "").strip() != secret:
+        raise HTTPException(status_code=401, detail="Invalid ingest secret")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins or ["http://localhost:3000"],
@@ -32,10 +40,8 @@ def health() -> dict[str, str]:
 
 
 @app.post("/ingest/run")
-async def ingest_run(x_ingest_secret: str | None = Header(default=None)) -> dict:
-    secret = settings.get("ingest_secret")
-    if secret and x_ingest_secret != secret:
-        raise HTTPException(status_code=401, detail="Invalid ingest secret")
+async def ingest_run(x_ingest_secret: str | None = Header(default=None, alias="X-Ingest-Secret")) -> dict:
+    _check_ingest_secret(x_ingest_secret)
     result = await run_ingestion()
     forecast = {}
     if result.carbon_upserted > 0 or result.mix_upserted > 0:
@@ -47,8 +53,6 @@ async def ingest_run(x_ingest_secret: str | None = Header(default=None)) -> dict
 
 
 @app.post("/forecast/run")
-def forecast_run(x_ingest_secret: str | None = Header(default=None)) -> dict:
-    secret = settings.get("ingest_secret")
-    if secret and x_ingest_secret != secret:
-        raise HTTPException(status_code=401, detail="Invalid ingest secret")
+def forecast_run(x_ingest_secret: str | None = Header(default=None, alias="X-Ingest-Secret")) -> dict:
+    _check_ingest_secret(x_ingest_secret)
     return run_carbon_forecast()
