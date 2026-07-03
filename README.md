@@ -8,9 +8,9 @@ Complément Web2 de [GreenOps](https://github.com/ChristopheChollet/GreenOps) �
 
 ## Captures d'écran
 
-| Landing | Dashboard | Prévision | Statut |
+| Landing | Tableau de bord | Prévision | Statut |
 |---|---|---|---|
-| ![Landing](docs/screenshots/landing.webp) | ![Dashboard](docs/screenshots/dashboard.webp) | ![Prévision](docs/screenshots/prevision.webp) | ![Statut](docs/screenshots/statut.webp) |
+| ![Landing](docs/screenshots/landing.webp) | ![Tableau de bord](docs/screenshots/dashboard.webp) | ![Prévision](docs/screenshots/prevision.webp) | ![Statut](docs/screenshots/statut.webp) |
 
 ## Architecture
 

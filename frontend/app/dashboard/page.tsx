@@ -30,7 +30,7 @@ export default async function DashboardPage() {
     <div>
       <PageHeader
         eyebrow="France · zone FR"
-        title="Dashboard énergie"
+        title="Tableau de bord énergie"
         description="Mix électrique RTE et intensité carbone Electricity Maps — données agrégées, démo portfolio non réglementaire."
         accent="#059669"
         icon={<DashboardIcon />}

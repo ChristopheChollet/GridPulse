@@ -13,7 +13,7 @@ const features = [
   {
     accent: "#0891b2",
     href: "/dashboard",
-    title: "Dashboard",
+    title: "Tableau de bord",
     icon: DashboardIcon,
     description:
       "KPIs, courbe carbone 24 h, mix empilé, créneau vert 6 h et export PDF/CSV — lecture publique, démo portfolio.",
@@ -60,13 +60,13 @@ export default function HomePage() {
             <span className="landing-title-accent">&amp; carbone FR</span>
           </h1>
           <p className="landing-lead">
-            GridPulse agrège RTE et Electricity Maps : ingestion horaire, dashboard,
+            GridPulse agrège RTE et Electricity Maps : ingestion horaire, tableau de bord,
             créneaux verts, exports et statut pipeline — le complément data de
             GreenOps, sans blockchain.
           </p>
           <div className="landing-hero-cta">
             <Link href="/dashboard" className="btn-primary px-6 py-2.5 text-sm">
-              Ouvrir le dashboard
+              Ouvrir le tableau de bord
             </Link>
             <a
               href={repoUrl}

@@ -73,7 +73,7 @@ function HeroPreviewPlaceholder() {
         <span className="screenshot-frame-dot" />
       </div>
       <div className="hero-preview-body hero-preview-body-muted">
-        <p className="text-sm text-secondary">Aperçu dashboard</p>
+        <p className="text-sm text-secondary">Aperçu tableau de bord</p>
         <p className="mt-2 text-xs text-muted">
           KPIs carbone, mix et prévision — données RTE &amp; Electricity Maps
         </p>

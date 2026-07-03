@@ -112,7 +112,7 @@ export default async function StatusPage() {
               <code className="text-xs">POST /ingest/run</code> avec header{" "}
               <code className="text-xs">X-Ingest-Secret</code>. Voir{" "}
               <Link href="/dashboard" className="text-emerald-600 hover:underline dark:text-emerald-400">
-                dashboard
+                tableau de bord
               </Link>
               .
             </p>
