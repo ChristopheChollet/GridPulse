@@ -1,0 +1,17 @@
+{
+  "results": [
+    {
+      "date_heure": "2026-03-07T14:00:00+00:00",
+      "nucleaire": 45000,
+      "eolien": 8000,
+      "solaire": 12000,
+      "hydraulique": 5000,
+      "gaz": 3000,
+      "charbon": 500,
+      "fioul": 200,
+      "bioenergies": 1500,
+      "autres": 300,
+      "consommation": 73500
+    }
+  ]
+}
