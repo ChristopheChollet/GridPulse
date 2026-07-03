@@ -35,8 +35,14 @@ app.include_router(data_router)
 
 
 @app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok", "service": "gridpulse-api"}
+def health() -> dict[str, str | bool]:
+    s = get_settings()
+    return {
+        "status": "ok",
+        "service": "gridpulse-api",
+        "supabase_configured": bool(s.get("supabase_url") and s.get("supabase_service_role_key")),
+        "electricity_maps_configured": bool(s.get("electricity_maps_token")),
+    }
 
 
 @app.post("/ingest/run")
