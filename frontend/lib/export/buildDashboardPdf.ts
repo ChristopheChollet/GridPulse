@@ -6,17 +6,28 @@ const PAGE_H = 842;
 const MARGIN = 50;
 const LINE = 14;
 
+function pdfSafeText(text: string): string {
+  return text
+    .replace(/\u202f/g, " ") // espace fine insécable (fr-FR, ex. 12 345)
+    .replace(/\u00a0/g, " ")
+    .replace(/\u2014/g, "-")
+    .replace(/\u2013/g, "-")
+    .replace(/\u2026/g, "...");
+}
+
 function fmtTime(iso: string | null | undefined): string {
-  if (!iso) return "—";
-  return new Intl.DateTimeFormat("fr-FR", {
-    dateStyle: "short",
-    timeStyle: "short",
-    timeZone: "Europe/Paris",
-  }).format(new Date(iso));
+  if (!iso) return "-";
+  return pdfSafeText(
+    new Intl.DateTimeFormat("fr-FR", {
+      dateStyle: "short",
+      timeStyle: "short",
+      timeZone: "Europe/Paris",
+    }).format(new Date(iso)),
+  );
 }
 
 function truncate(text: string, max: number): string {
-  return text.length <= max ? text : `${text.slice(0, max - 1)}…`;
+  return text.length <= max ? text : `${text.slice(0, max - 1)}...`;
 }
 
 export async function buildDashboardPdf(data: DashboardReportData): Promise<Uint8Array> {
@@ -41,7 +52,7 @@ export async function buildDashboardPdf(data: DashboardReportData): Promise<Uint
   ) => {
     const size = opts?.size ?? 10;
     ensureSpace(LINE + 4);
-    page.drawText(text, {
+    page.drawText(pdfSafeText(text), {
       x: MARGIN,
       y,
       size,
@@ -60,10 +71,10 @@ export async function buildDashboardPdf(data: DashboardReportData): Promise<Uint
   });
   y -= 26;
 
-  drawLine("Rapport energie — France", { bold: true, size: 14 });
+  drawLine("Rapport energie - France", { bold: true, size: 14 });
   y -= 4;
   drawLine(
-    `Genere le ${data.generatedAt.toLocaleString("fr-FR")} — demo portfolio, non reglementaire`,
+    `Genere le ${pdfSafeText(data.generatedAt.toLocaleString("fr-FR"))} - demo portfolio, non reglementaire`,
     { size: 9, color: muted },
   );
   y -= 8;
@@ -73,19 +84,19 @@ export async function buildDashboardPdf(data: DashboardReportData): Promise<Uint
   drawLine("Indicateurs actuels", { bold: true, size: 12 });
   drawLine(
     `Intensite carbone : ${
-      summary.carbon_gco2_kwh != null ? `${summary.carbon_gco2_kwh} gCO2/kWh` : "—"
+      summary.carbon_gco2_kwh != null ? `${summary.carbon_gco2_kwh} gCO2/kWh` : "-"
     } (${fmtTime(summary.carbon_recorded_at)})`,
   );
   drawLine(
     `Part renouvelable : ${
-      summary.renewable_pct != null ? `${summary.renewable_pct} %` : "—"
+      summary.renewable_pct != null ? `${summary.renewable_pct} %` : "-"
     } (${fmtTime(summary.mix_recorded_at)})`,
   );
   drawLine(
     `Consommation : ${
       summary.consumption_mw != null
-        ? `${Math.round(summary.consumption_mw).toLocaleString("fr-FR")} MW`
-        : "—"
+        ? `${pdfSafeText(Math.round(summary.consumption_mw).toLocaleString("fr-FR"))} MW`
+        : "-"
     }`,
   );
   y -= 8;
@@ -95,7 +106,7 @@ export async function buildDashboardPdf(data: DashboardReportData): Promise<Uint
     drawLine(`Meilleure fenetre ${greenWindows.window_hours} h`, { bold: true, size: 12 });
     drawLine(`De ${fmtTime(w.start_at)} a ${fmtTime(w.end_at)}`);
     drawLine(
-      `Carbone moyen ${w.avg_carbon_gco2_kwh} gCO2/kWh — renouvelable ${w.avg_renewable_pct} %`,
+      `Carbone moyen ${w.avg_carbon_gco2_kwh} gCO2/kWh - renouvelable ${w.avg_renewable_pct} %`,
     );
     y -= 8;
   }
@@ -103,7 +114,7 @@ export async function buildDashboardPdf(data: DashboardReportData): Promise<Uint
   drawLine("Historique carbone (extrait)", { bold: true, size: 12 });
   for (const p of data.carbonPoints.slice(-12)) {
     drawLine(
-      `${fmtTime(p.recorded_at)} — ${p.carbon_gco2_kwh} gCO2/kWh`,
+      `${fmtTime(p.recorded_at)} - ${p.carbon_gco2_kwh} gCO2/kWh`,
       { size: 9 },
     );
   }
@@ -115,7 +126,7 @@ export async function buildDashboardPdf(data: DashboardReportData): Promise<Uint
       Number(p.wind_pct) + Number(p.solar_pct) + Number(p.hydro_pct);
     drawLine(
       truncate(
-        `${fmtTime(p.recorded_at)} — ren. ${ren.toFixed(0)} % — nucl. ${p.nuclear_pct} %`,
+        `${fmtTime(p.recorded_at)} - ren. ${ren.toFixed(0)} % - nucl. ${p.nuclear_pct} %`,
         90,
       ),
       { size: 9 },
