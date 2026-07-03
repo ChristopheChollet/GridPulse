@@ -9,9 +9,18 @@
 
 ## Railway (backend)
 
-1. New project from repo
-2. Set root to `backend` or use `railway.toml`
-3. Environment variables from `.env.example`
+1. New project → **Deploy from GitHub** → repo `GridPulse`
+2. **Ne change pas** le Root Directory (laisse vide / repo root) — `railway.toml` pointe vers `backend/Dockerfile`
+3. Clique sur le service **GridPulse** → onglet **Variables** → ajoute :
+   - `SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `ELECTRICITY_MAPS_TOKEN`
+   - `INGEST_SECRET`
+   - `CORS_ORIGINS` = ton URL Vercel (ex. `https://grid-pulse-xxx.vercel.app`)
+4. Onglet **Settings** → **Networking** → **Generate Domain**
+5. Vérifie : `curl https://TON-DOMAINE.up.railway.app/health`
+
+Si le build fail encore : onglet **Deployments** → clic sur le deploy rouge → lire les **Build Logs**.
 
 ## GitHub Actions (hourly ingest)
 
