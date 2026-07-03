@@ -6,6 +6,12 @@ Complément Web2 de [GreenOps](https://github.com/ChristopheChollet/GreenOps) �
 
 > **Phrase entretien :** *« Je sais ship un produit SaaS métier **et** un pipeline data énergie avec visualisation et baseline de prévision. »*
 
+## Captures d'écran
+
+| Landing | Dashboard | Prévision | Statut |
+|---|---|---|---|
+| ![Landing](docs/screenshots/landing.webp) | ![Dashboard](docs/screenshots/dashboard.webp) | ![Prévision](docs/screenshots/prevision.webp) | ![Statut](docs/screenshots/statut.webp) |
+
 ## Architecture
 
 ```
