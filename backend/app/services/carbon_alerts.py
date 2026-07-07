@@ -8,6 +8,7 @@ import httpx
 
 from app.config import get_settings
 from app.db.client import get_supabase
+from app.services.webhook_format import build_webhook_body, format_gridpulse_carbon_alert_text
 
 DEFAULT_THRESHOLD_GCO2 = 200.0
 
@@ -38,9 +39,10 @@ def _fetch_latest_carbon_rows(limit: int = 2) -> list[dict[str, Any]]:
     return res.data or []
 
 
-async def post_webhook(url: str, payload: dict[str, Any]) -> None:
+async def post_webhook(url: str, text: str, raw: dict[str, Any]) -> None:
+    body = build_webhook_body(url, text, raw)
     async with httpx.AsyncClient(timeout=15.0) as client:
-        resp = await client.post(url, json=payload)
+        resp = await client.post(url, json=body)
         resp.raise_for_status()
 
 
@@ -87,5 +89,5 @@ async def evaluate_carbon_alert() -> dict[str, Any] | None:
         "service": "gridpulse",
     }
 
-    await post_webhook(webhook_url, payload)
+    await post_webhook(webhook_url, format_gridpulse_carbon_alert_text(payload), payload)
     return {"fired": True, **payload}

@@ -105,6 +105,8 @@ docker compose up
 
 Variables : `ALERT_WEBHOOK_URL`, `ALERT_WEBHOOK_ENABLED`, `CARBON_ALERT_THRESHOLD_GCO2`.
 
+Guide pas à pas (Slack, Discord, Railway, Vercel Cron) : voir [FlexSlot `docs/ALERTES.md`](https://github.com/ChristopheChollet/FlexSlot/blob/main/docs/ALERTES.md).
+
 ## V3 (optionnel — plus tard)
 
 > Évolutions possibles après stabilisation en prod.
