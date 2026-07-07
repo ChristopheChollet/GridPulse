@@ -109,7 +109,7 @@ Guide pas à pas (Slack, Discord, Railway, Vercel Cron) : voir [FlexSlot `docs/A
 
 ## V3 (optionnel — plus tard)
 
-> Évolutions possibles après stabilisation en prod.
+> Détail consolidé écosystème : [portfolio `docs/V3-ROADMAP.md`](https://github.com/ChristopheChollet/portfolio-starter-kit/blob/main/docs/V3-ROADMAP.md).
 
 | Idée | Description | Intérêt |
 |------|-------------|---------|
