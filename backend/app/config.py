@@ -17,4 +17,9 @@ def get_settings() -> dict[str, str | None]:
         "rte_api_key": os.getenv("RTE_API_KEY"),
         "ingest_secret": os.getenv("INGEST_SECRET", "dev-secret"),
         "cors_origins": os.getenv("CORS_ORIGINS", "http://localhost:3000"),
+        "carbon_alert_threshold_gco2": os.getenv(
+            "CARBON_ALERT_THRESHOLD_GCO2", "200"
+        ),
+        "alert_webhook_url": os.getenv("ALERT_WEBHOOK_URL"),
+        "alert_webhook_enabled": os.getenv("ALERT_WEBHOOK_ENABLED", "true"),
     }

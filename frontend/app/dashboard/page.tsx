@@ -1,5 +1,6 @@
 import { CarbonChart, MixStackChart } from "@/components/EnergyCharts";
 import { DashboardExport } from "@/components/DashboardExport";
+import { DashboardLiveRefresh } from "@/components/DashboardLiveRefresh";
 import { GreenWindowCard } from "@/components/GreenWindowCard";
 import { DashboardIcon } from "@/components/ModuleIcons";
 import { PageHeader } from "@/components/PageHeader";
@@ -28,6 +29,7 @@ export default async function DashboardPage() {
 
   return (
     <div>
+      <DashboardLiveRefresh />
       <PageHeader
         eyebrow="France · zone FR"
         title="Tableau de bord énergie"

@@ -8,6 +8,7 @@ from typing import Any
 from app.config import get_settings
 from app.db.client import get_supabase
 from app.ingest import electricity_maps, rte
+from app.services.carbon_alerts import evaluate_carbon_alert
 
 
 def _log_ingest_run(result: "IngestResult") -> None:
@@ -30,13 +31,17 @@ class IngestResult:
     mix_upserted: int
     carbon_upserted: int
     errors: list[str]
+    alert: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload: dict[str, Any] = {
             "mix_upserted": self.mix_upserted,
             "carbon_upserted": self.carbon_upserted,
             "errors": self.errors,
         }
+        if self.alert is not None:
+            payload["alert"] = self.alert
+        return payload
 
 
 def _upsert_rows(table: str, rows: list[dict[str, Any]], on_conflict: str) -> int:
@@ -80,5 +85,12 @@ async def run_ingestion() -> IngestResult:
         carbon_upserted=carbon_count,
         errors=errors,
     )
+
+    if carbon_count > 0:
+        try:
+            result.alert = await evaluate_carbon_alert()
+        except Exception as exc:  # noqa: BLE001
+            errors.append(f"alert: {exc}")
+
     _log_ingest_run(result)
     return result

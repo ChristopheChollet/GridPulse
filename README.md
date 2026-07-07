@@ -98,6 +98,13 @@ docker compose up
 - **Export PDF / CSV** — boutons dans l'en-tête du dashboard (pdf-lib)
 - **Page `/status`** — volumes en base, dernière ingestion, erreurs pipeline
 
+## V2.1 (ops & monitoring) — livré
+
+- **Alertes carbone** — webhook à la **franchissement** du seuil (`CARBON_ALERT_THRESHOLD_GCO2`, défaut 200) après chaque ingestion horaire
+- **Dashboard live** — refresh automatique toutes les 5 min sur `/dashboard`
+
+Variables : `ALERT_WEBHOOK_URL`, `ALERT_WEBHOOK_ENABLED`, `CARBON_ALERT_THRESHOLD_GCO2`.
+
 ## V3 (optionnel — plus tard)
 
 > Évolutions possibles après stabilisation en prod.
@@ -105,12 +112,11 @@ docker compose up
 | Idée | Description | Intérêt |
 |------|-------------|---------|
 | **Prévision ML** | Remplacer / compléter la moyenne mobile 24 h par un modèle scikit-learn (features horaires, jour/semaine) | Renforce la crédibilité côté data science |
-| **Alertes** | Seuil carbone configurable → webhook Slack / email si dépassement | Angle ops / monitoring |
+| **Alertes e-mail** | Complément webhook (Resend / SMTP) | Canaux sans Slack |
 | **Multi-zone** | DE, ES, GB via Electricity Maps (sélecteur zone) | Élargit le scope sans refonte |
-| **Pont GreenOps** | Lien narratif ou API légère : créneau vert GridPulse → suggestion flex GreenOps | Story GreenChain unifiée |
 | **Temps réel** | SSE ou polling court sur `/dashboard` (refresh auto sans reload) | UX plus « live » |
 
-Ordre suggéré si V3 un jour : **ML** → **alertes** → reste selon envie.
+Ordre suggéré si V3 un jour : **ML** → **e-mail** → reste selon envie.
 
 ## Déploiement
 
