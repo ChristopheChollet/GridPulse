@@ -3,7 +3,7 @@ export function PageHeader({
   title,
   description,
   actions,
-  accent = "#059669",
+  accent = "#0891b2",
   icon,
 }: {
   eyebrow?: string;

@@ -17,7 +17,7 @@ export function GridPulseLogo({
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden
       >
-        <rect width="32" height="32" rx="8" fill="#059669" />
+        <rect width="32" height="32" rx="8" fill="#0891b2" />
         <path
           d="M6 22 L11 16 L16 19 L22 10 L26 14"
           stroke="white"

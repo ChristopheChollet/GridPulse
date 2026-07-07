@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = [
-  { href: "/dashboard", label: "Tableau de bord", accent: "#059669" },
+  { href: "/dashboard", label: "Tableau de bord", accent: "#0891b2" },
   { href: "/forecast", label: "Prévision", accent: "#0891b2" },
   { href: "/status", label: "Statut", accent: "#7c3aed" },
 ] as const;

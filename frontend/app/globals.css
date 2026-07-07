@@ -7,12 +7,12 @@ html.dark {
 }
 
 ::selection {
-  background-color: #059669;
+  background-color: #0891b2;
   color: #fefefe;
 }
 
 :root {
-  --accent-emerald: #059669;
+  --accent-cyan: #0891b2;
   --surface: #ffffff;
   --surface-muted: #fafafa;
   --surface-border: #e4e4e7;
@@ -48,13 +48,13 @@ body {
   min-height: 100vh;
   color: var(--text-primary);
   background:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgb(16 185 129 / 0.08), transparent),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgb(8 145 178 / 0.08), transparent),
     var(--canvas-bg, #ffffff);
 }
 
 .dark .app-canvas {
   background:
-    radial-gradient(ellipse 70% 45% at 50% -10%, rgb(16 185 129 / 0.1), transparent),
+    radial-gradient(ellipse 70% 45% at 50% -10%, rgb(8 145 178 / 0.1), transparent),
     #0a0a0a;
 }
 
@@ -66,9 +66,15 @@ body {
   position: sticky;
   top: 0;
   z-index: 40;
-  border-bottom: 1px solid var(--surface-border);
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  backdrop-filter: blur(8px);
+  border-bottom: 1px solid color-mix(in srgb, var(--surface-border) 85%, transparent);
+  background-color: rgb(255 255 255 / 0.62);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .site-header {
+    backdrop-filter: blur(16px) saturate(180%);
+  }
 }
 
 .site-header-bar {
@@ -118,7 +124,7 @@ body {
 }
 
 .gridpulse-wordmark-accent {
-  color: #059669;
+  color: #0891b2;
 }
 
 .nav-link {
@@ -163,14 +169,14 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 0.5rem;
-  background: #059669;
+  background: #0891b2;
   color: white;
   font-weight: 500;
   transition: background 0.15s;
 }
 
 .btn-primary:hover {
-  background: #047857;
+  background: #0e7490;
 }
 
 .btn-ghost {
@@ -185,12 +191,12 @@ body {
 }
 
 .btn-ghost:hover {
-  border-color: rgb(167 243 208);
+  border-color: rgb(165 243 252);
   color: var(--text-primary);
 }
 
 .dark .btn-ghost:hover {
-  border-color: rgb(52 211 153 / 0.35);
+  border-color: rgb(34 211 238 / 0.35);
 }
 
 .stat-grid {
@@ -216,7 +222,7 @@ body {
   border-color: rgb(82 82 82);
 }
 
-.stat-card-ok .stat-value { color: #059669; }
+.stat-card-ok .stat-value { color: #0891b2; }
 .stat-card-warn .stat-value { color: #d97706; }
 
 .page-header {
@@ -258,14 +264,14 @@ body {
 
 .disclaimer-card {
   border-radius: 0.75rem;
-  border: 1px solid rgb(167 243 208);
-  background: rgb(236 253 245 / 0.6);
+  border: 1px solid rgb(165 243 252);
+  background: rgb(207 250 254 / 0.6);
   padding: 1rem 1.125rem;
 }
 
 .dark .disclaimer-card {
-  border-color: rgb(52 211 153 / 0.25);
-  background: rgb(16 185 129 / 0.08);
+  border-color: rgb(34 211 238 / 0.25);
+  background: rgb(8 145 178 / 0.08);
 }
 
 .stat-label {
@@ -327,7 +333,7 @@ body {
 }
 
 .dark .site-header {
-  background: rgb(0 0 0 / 0.72);
+  background-color: rgb(10 10 10 / 0.42);
 }
 
 .landing-hero-split {
@@ -348,11 +354,11 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: rgb(4 120 87);
+  color: rgb(14 116 144);
 }
 
 .dark .landing-eyebrow {
-  color: rgb(110 231 183);
+  color: rgb(103 232 249);
 }
 
 .landing-title {
@@ -446,13 +452,13 @@ body {
 }
 
 .feature-card-link:hover {
-  border-color: rgb(167 243 208);
+  border-color: rgb(165 243 252);
   transform: translateY(-2px);
   box-shadow: var(--shadow-elevated);
 }
 
 .dark .feature-card-link:hover {
-  border-color: rgb(52 211 153 / 0.35);
+  border-color: rgb(34 211 238 / 0.35);
 }
 
 .feature-card-icon {
@@ -547,7 +553,7 @@ body {
 }
 
 .hero-preview-value-ok {
-  color: #059669;
+  color: #0891b2;
 }
 
 .hero-preview-chart {
@@ -562,7 +568,7 @@ body {
 .hero-preview-bar {
   flex: 1;
   border-radius: 0.25rem 0.25rem 0 0;
-  background: linear-gradient(to top, #059669, rgb(16 185 129 / 0.45));
+  background: linear-gradient(to top, #0891b2, rgb(8 145 178 / 0.45));
   min-height: 0.5rem;
 }
 

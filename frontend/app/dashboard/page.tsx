@@ -32,7 +32,7 @@ export default async function DashboardPage() {
         eyebrow="France · zone FR"
         title="Tableau de bord énergie"
         description="Mix électrique RTE et intensité carbone Electricity Maps — données agrégées, démo portfolio non réglementaire."
-        accent="#059669"
+        accent="#0891b2"
         icon={<DashboardIcon />}
         actions={
           <div className="flex flex-wrap items-center gap-3">

@@ -51,7 +51,7 @@ export function CarbonChart({ points }: { points: CarbonPoint[] }) {
               type="monotone"
               dataKey="carbon"
               name="gCO₂/kWh"
-              stroke="#059669"
+              stroke="#0891b2"
               strokeWidth={2}
               dot={false}
             />
@@ -218,7 +218,7 @@ export function ForecastChart({
               type="monotone"
               dataKey="actual"
               name="Historique"
-              stroke="#059669"
+              stroke="#0891b2"
               strokeWidth={2}
               dot={false}
               connectNulls={false}
