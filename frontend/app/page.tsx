@@ -5,7 +5,8 @@ import {
   ForecastIcon,
   StatusIcon,
 } from "@/components/ModuleIcons";
-import { getRepoUrl } from "@/lib/site";
+import { OpsChain } from "@/components/OpsChain";
+import { getEcosystemLinks, getRepoUrl } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -48,6 +49,7 @@ const stack = [
 
 export default function HomePage() {
   const repoUrl = getRepoUrl();
+  const ecosystem = getEcosystemLinks();
 
   return (
     <div className="pb-16">
@@ -87,6 +89,14 @@ export default function HomePage() {
         </div>
         <HeroLivePreview />
       </section>
+
+      <OpsChain
+        highlight="data"
+        links={{
+          flexSlot: ecosystem.flexSlot,
+          greenOps: ecosystem.greenOps,
+        }}
+      />
 
       <section className="landing-modules motion-fade-up motion-stagger-2" aria-labelledby="features-heading">
         <p className="text-xs font-medium uppercase tracking-widest text-muted">Modules</p>

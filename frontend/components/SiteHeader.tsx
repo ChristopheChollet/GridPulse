@@ -2,10 +2,11 @@ import Link from "next/link";
 import { GridPulseLogo } from "@/components/GridPulseLogo";
 import { NavLinks } from "@/components/NavLinks";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { glassHeaderStyle } from "@/lib/glassHeaderStyle";
 
 export function SiteHeader() {
   return (
-    <header className="site-header" role="banner">
+    <header className="site-header" style={glassHeaderStyle} role="banner">
       <div className="site-header-bar mx-auto flex max-w-5xl items-center justify-between gap-4 px-4">
         <Link href="/" className="brand-lockup">
           <GridPulseLogo size="md" />
