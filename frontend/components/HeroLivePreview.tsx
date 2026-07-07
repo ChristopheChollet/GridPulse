@@ -1,9 +1,19 @@
-import { formatTime, getSummary } from "@/lib/api";
+import { formatTime, getCarbon, getSummary } from "@/lib/api";
+import { valuesToBarHeightPcts } from "@/lib/chartBarHeights";
+
+const DEMO_BAR_VALUES = [42, 38, 35, 48, 40, 36];
 
 export async function HeroLivePreview() {
   let summary = null;
+  let carbonPoints: { carbon_gco2_kwh: number }[] = [];
+
   try {
-    summary = await getSummary();
+    const [summaryResult, carbonResult] = await Promise.all([
+      getSummary(),
+      getCarbon(8),
+    ]);
+    summary = summaryResult;
+    carbonPoints = carbonResult.points ?? [];
   } catch {
     return <HeroPreviewPlaceholder />;
   }
@@ -14,6 +24,13 @@ export async function HeroLivePreview() {
   if (!hasData) {
     return <HeroPreviewPlaceholder />;
   }
+
+  const barValues =
+    carbonPoints.length > 0
+      ? carbonPoints.slice(-6).map((p) => p.carbon_gco2_kwh)
+      : DEMO_BAR_VALUES;
+
+  const barHeights = valuesToBarHeightPcts(barValues);
 
   return (
     <div className="screenshot-frame motion-fade-up motion-stagger-2">
@@ -49,15 +66,13 @@ export async function HeroLivePreview() {
           </div>
         </div>
         <div className="hero-preview-chart" aria-hidden>
-          <div className="hero-preview-bar" style={{ height: "45%" }} />
-          <div className="hero-preview-bar" style={{ height: "70%" }} />
-          <div className="hero-preview-bar" style={{ height: "55%" }} />
-          <div className="hero-preview-bar" style={{ height: "85%" }} />
-          <div className="hero-preview-bar" style={{ height: "60%" }} />
-          <div className="hero-preview-bar" style={{ height: "40%" }} />
+          {barHeights.map((height, i) => (
+            <div key={i} className="hero-preview-bar" style={{ height }} />
+          ))}
         </div>
         <p className="hero-preview-foot text-xs text-muted">
           Données live · {formatTime(summary.carbon_recorded_at ?? summary.mix_recorded_at)}
+          <span className="block mt-1">Intensité carbone (6 dernières heures)</span>
         </p>
       </div>
     </div>
@@ -65,6 +80,8 @@ export async function HeroLivePreview() {
 }
 
 function HeroPreviewPlaceholder() {
+  const barHeights = valuesToBarHeightPcts(DEMO_BAR_VALUES);
+
   return (
     <div className="screenshot-frame motion-fade-up motion-stagger-2">
       <div className="screenshot-frame-chrome">
@@ -77,6 +94,11 @@ function HeroPreviewPlaceholder() {
         <p className="mt-2 text-xs text-muted">
           KPIs carbone, mix et prévision — données RTE &amp; Electricity Maps
         </p>
+        <div className="hero-preview-chart mt-4" aria-hidden>
+          {barHeights.map((height, i) => (
+            <div key={i} className="hero-preview-bar" style={{ height }} />
+          ))}
+        </div>
       </div>
     </div>
   );
