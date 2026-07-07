@@ -372,7 +372,11 @@ body {
 }
 
 .landing-title-accent {
-  color: var(--accent-cyan);
+  color: #0891b2;
+}
+
+h1.landing-title .landing-title-accent {
+  color: #0891b2;
 }
 
 .landing-lead {
