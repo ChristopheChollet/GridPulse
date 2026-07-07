@@ -16,7 +16,7 @@
    - `SUPABASE_SERVICE_ROLE_KEY`
    - `ELECTRICITY_MAPS_TOKEN`
    - `INGEST_SECRET`
-   - `CORS_ORIGINS` = ton URL Vercel (ex. `https://grid-pulse-xxx.vercel.app`)
+   - `CORS_ORIGINS` = tes URLs Vercel séparées par des virgules (ex. `https://grid-pulse-xxx.vercel.app,https://flex-slot.vercel.app`)
 4. Onglet **Settings** → **Networking** → **Generate Domain**
 5. Vérifie : `curl https://TON-DOMAINE.up.railway.app/health`
 
