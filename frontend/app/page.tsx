@@ -17,7 +17,7 @@ const features = [
     title: "Tableau de bord",
     icon: DashboardIcon,
     description:
-      "KPIs, courbe carbone 24 h, mix empilé, créneau vert 6 h et export PDF/CSV — lecture publique, démo portfolio.",
+      "KPIs, courbe carbone 24 h, mix empilé, créneau vert 6 h et export PDF/CSV — lecture publique, prototype non réglementaire.",
   },
   {
     accent: "#7c3aed",

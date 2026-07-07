@@ -1,6 +1,6 @@
 # Cadrage métier — GridPulse
 
-Document portfolio : vocabulaire **mix électrique** et **intensité carbone** pour parler honnêtement en entretien.
+Référence interne : vocabulaire **mix électrique** et **intensité carbone** pour cadrer le produit et communiquer sur le périmètre.
 
 **Positionnement :** couche **data / visualisation** sur la niche énergie — complète GreenOps (workflow flex/REC) sans remplacer RTE ni Electricity Maps.
 
@@ -20,7 +20,7 @@ Le **mix** décrit la répartition de la production électrique en France à un 
 
 **Consommation (MW)** : demande instantanée du réseau — ordre de grandeur à afficher, pas une facture client.
 
-**Phrase entretien :** *« J'agrège des séries temporelles open data RTE pour visualiser l'évolution du mix, pas pour piloter le réseau. »*
+**Périmètre assumé :** agrégation de séries temporelles open data RTE pour visualiser l'évolution du mix — pas de pilotage réseau.
 
 ---
 
@@ -31,7 +31,7 @@ L'**intensité carbone** (gCO₂/kWh) indique les émissions moyennes liées à 
 - **Bas** (~20–50 g) : beaucoup de nucléaire/renouvelable
 - **Élevé** (>400 g) : plus de gaz/charbon ou imports carbonés
 
-**Phrase entretien :** *« GridPulse croise mix RTE et intensité carbone pour montrer quand le réseau est « plus vert » — utile pour sensibiliser au flex timing, en démo. »*
+**Valeur produit :** croiser mix RTE et intensité carbone pour identifier quand le réseau est « plus vert » — utile pour le flex timing et l'orchestration (FlexSlot).
 
 ---
 

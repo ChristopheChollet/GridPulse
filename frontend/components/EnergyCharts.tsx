@@ -237,7 +237,7 @@ export function ForecastChart({
         </ResponsiveContainer>
       </div>
       <p className="chart-caption">
-        Baseline portfolio — pas un modèle opérationnel RTE.
+        Baseline pédagogique — pas un modèle opérationnel RTE.
       </p>
     </div>
   );

@@ -2,9 +2,12 @@
 
 Tableau de bord **data** sur le mix électrique français et l'**intensité carbone** : ingestion automatique (RTE + Electricity Maps), historique, KPIs et prévision simple.
 
-Complément Web2 de [GreenOps](https://github.com/ChristopheChollet/GreenOps) — même niche énergie/climat, sans blockchain.
+Complément Web2 de [GreenOps](https://github.com/ChristopheChollet/GreenOps) et amont de [FlexSlot](https://github.com/ChristopheChollet/FlexSlot) — même niche énergie/climat, sans blockchain.
 
-> **Phrase entretien :** *« Je sais ship un produit SaaS métier **et** un pipeline data énergie avec visualisation et baseline de prévision. »*
+```
+GridPulse  →  FlexSlot  →  GreenOps
+  data         décision       action
+```
 
 ## Captures d'écran
 
@@ -97,11 +100,11 @@ docker compose up
 
 ## V3 (optionnel — plus tard)
 
-> Non bloquant pour le portfolio. Priorité après deploy + captures : ship V2 en prod.
+> Évolutions possibles après stabilisation en prod.
 
 | Idée | Description | Intérêt |
 |------|-------------|---------|
-| **Prévision ML** | Remplacer / compléter la moyenne mobile 24 h par un modèle scikit-learn (features horaires, jour/semaine) | Plus crédible côté data science en entretien |
+| **Prévision ML** | Remplacer / compléter la moyenne mobile 24 h par un modèle scikit-learn (features horaires, jour/semaine) | Renforce la crédibilité côté data science |
 | **Alertes** | Seuil carbone configurable → webhook Slack / email si dépassement | Angle ops / monitoring |
 | **Multi-zone** | DE, ES, GB via Electricity Maps (sélecteur zone) | Élargit le scope sans refonte |
 | **Pont GreenOps** | Lien narratif ou API légère : créneau vert GridPulse → suggestion flex GreenOps | Story GreenChain unifiée |
@@ -130,7 +133,7 @@ Configurer les secrets GitHub :
 
 ## Limites (assumées)
 
-- Démo portfolio, **pas** un outil opérationnel RTE
+- Prototype **non réglementaire**, pas un outil opérationnel RTE
 - Prévision = **moyenne mobile 24 h**, pas modèle météo/production
 - Données RTE via miroir ODRE (open data)
 
@@ -142,4 +145,4 @@ cd backend && pytest
 
 ## Licence
 
-MIT — projet portfolio Christophe Chollet
+MIT — Christophe Chollet

@@ -74,7 +74,7 @@ export async function buildDashboardPdf(data: DashboardReportData): Promise<Uint
   drawLine("Rapport energie - France", { bold: true, size: 14 });
   y -= 4;
   drawLine(
-    `Genere le ${pdfSafeText(data.generatedAt.toLocaleString("fr-FR"))} - demo portfolio, non reglementaire`,
+    `Genere le ${pdfSafeText(data.generatedAt.toLocaleString("fr-FR"))} - prototype non reglementaire`,
     { size: 9, color: muted },
   );
   y -= 8;

@@ -34,9 +34,9 @@ export default async function ForecastPage() {
 
       <div className="disclaimer-card">
         <p className="text-sm text-secondary">
-          <strong className="text-primary">Baseline portfolio</strong> — cette prévision
-          n&apos;est pas un modèle météo/production RTE. Elle sert à illustrer un pipeline
-          data + ML léger en entretien.
+          <strong className="text-primary">Baseline pédagogique</strong> — cette prévision
+          n&apos;est pas un modèle météo/production RTE. Elle illustre un pipeline
+          data et une prévision simple sur séries temporelles.
         </p>
       </div>
 
