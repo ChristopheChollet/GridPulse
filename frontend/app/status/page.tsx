@@ -24,7 +24,7 @@ export default async function StatusPage() {
         eyebrow="Pipeline"
         title="Statut ingestion"
         description="Dernière synchronisation, volumes en base et erreurs récentes du pipeline RTE / Electricity Maps."
-        accent="#7c3aed"
+        accent="#d97706"
         icon={<StatusIcon />}
       />
 

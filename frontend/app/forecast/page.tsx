@@ -28,7 +28,7 @@ export default async function ForecastPage() {
         eyebrow="Baseline ML"
         title="Prévision carbone"
         description="Moyenne mobile 24 h sur l'intensité carbone — modèle pédagogique, pas opérationnel RTE."
-        accent="#0891b2"
+        accent="#7c3aed"
         icon={<ForecastIcon />}
       />
 
