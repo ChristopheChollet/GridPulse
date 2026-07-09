@@ -495,12 +495,16 @@ h1.landing-title .landing-title-accent {
 .feature-grid {
   display: grid;
   gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  grid-template-columns: 1fr;
   list-style: none;
   padding: 0;
-  margin-inline: 0;
-  margin-bottom: 0;
-  margin-top: 3rem;
+  margin: 1.5rem 0 0;
+}
+
+@media (min-width: 640px) {
+  .feature-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .feature-card {

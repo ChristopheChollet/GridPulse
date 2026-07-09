@@ -101,7 +101,7 @@ export default function HomePage() {
       <section className="landing-modules motion-fade-up motion-stagger-2" aria-labelledby="features-heading">
         <p className="text-xs font-medium uppercase tracking-widest text-muted">Modules</p>
         <h2 id="features-heading" className="mt-2 text-xl font-semibold text-primary">
-          Les trois pages du produit
+          Les pages du produit
         </h2>
         <p className="landing-modules-lead">
           Même entrées que la navigation — le pipeline data (FastAPI + cron) n&apos;a
