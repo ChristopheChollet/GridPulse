@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { MeridianJourneyBar } from "@/components/MeridianJourneyBar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -45,6 +46,7 @@ export default function RootLayout({
       <body className="app-canvas flex min-h-screen flex-col antialiased">
         <ThemeProvider>
           <SiteHeader />
+          <MeridianJourneyBar current="gridpulse" />
           <main id="main-content" className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">{children}</main>
           <SiteFooter />
         </ThemeProvider>

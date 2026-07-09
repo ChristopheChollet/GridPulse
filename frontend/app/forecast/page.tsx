@@ -1,3 +1,4 @@
+import { ApiErrorState } from "@/components/ApiErrorState";
 import { ForecastChart } from "@/components/EnergyCharts";
 import { ForecastIcon } from "@/components/ModuleIcons";
 import { PageHeader } from "@/components/PageHeader";
@@ -41,10 +42,11 @@ export default async function ForecastPage() {
       </div>
 
       {error ? (
-        <div className="empty-state mb-8 mt-6">
-          <p className="font-medium text-primary">API indisponible</p>
-          <p className="mt-2 text-sm">{error}</p>
-        </div>
+        <ApiErrorState
+          className="mb-8 mt-6"
+          hint="Vérifiez que le backend FastAPI expose /forecast, puis exécutez POST /ingest/run."
+          detail={error}
+        />
       ) : null}
 
       {latestForecast != null ? (

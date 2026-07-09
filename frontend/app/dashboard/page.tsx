@@ -1,3 +1,4 @@
+import { ApiErrorState } from "@/components/ApiErrorState";
 import { CarbonChart, MixStackChart } from "@/components/EnergyCharts";
 import { DashboardExport } from "@/components/DashboardExport";
 import { DashboardLiveRefresh } from "@/components/DashboardLiveRefresh";
@@ -54,15 +55,7 @@ export default async function DashboardPage() {
         }
       />
 
-      {error ? (
-        <div className="empty-state mb-8">
-          <p className="font-medium text-primary">API indisponible</p>
-          <p className="mt-2 text-sm">{error}</p>
-          <p className="mt-2 text-xs">
-            Lancez le backend FastAPI sur le port 8000, puis exécutez POST /ingest/run.
-          </p>
-        </div>
-      ) : null}
+      {error ? <ApiErrorState detail={error} /> : null}
 
       {summary ? (
         <StatGrid

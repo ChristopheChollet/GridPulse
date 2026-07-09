@@ -1,3 +1,4 @@
+import { ApiErrorState } from "@/components/ApiErrorState";
 import { StatusIcon } from "@/components/ModuleIcons";
 import { PageHeader } from "@/components/PageHeader";
 import { StatGrid } from "@/components/StatGrid";
@@ -29,10 +30,10 @@ export default async function StatusPage() {
       />
 
       {error ? (
-        <div className="empty-state mb-8">
-          <p className="font-medium text-primary">API indisponible</p>
-          <p className="mt-2 text-sm">{error}</p>
-        </div>
+        <ApiErrorState
+          hint="Vérifiez que le backend FastAPI est démarré sur le port 8000."
+          detail={error}
+        />
       ) : null}
 
       {status ? (
