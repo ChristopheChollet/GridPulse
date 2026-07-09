@@ -39,6 +39,28 @@ def _fetch_latest_carbon_rows(limit: int = 2) -> list[dict[str, Any]]:
     return res.data or []
 
 
+def _persist_carbon_alert(payload: dict[str, Any], text: str) -> None:
+    try:
+        client = get_supabase()
+        title = (
+            f"Seuil carbone dépassé — {payload['carbon_gco2_kwh']:.0f} gCO₂/kWh"
+        )
+        client.table("meridian_alerts").insert(
+            {
+                "source": "gridpulse",
+                "event_type": "carbon_threshold_exceeded",
+                "title": title,
+                "message": text,
+                "payload": payload,
+                "zone": payload.get("zone"),
+                "carbon_gco2_kwh": payload.get("carbon_gco2_kwh"),
+                "threshold_gco2_kwh": payload.get("threshold_gco2_kwh"),
+            }
+        ).execute()
+    except Exception as exc:
+        print(f"[gridpulse] persist meridian alert failed: {exc}")
+
+
 async def post_webhook(url: str, text: str, raw: dict[str, Any]) -> None:
     body = build_webhook_body(url, text, raw)
     async with httpx.AsyncClient(timeout=15.0) as client:
@@ -49,8 +71,6 @@ async def post_webhook(url: str, text: str, raw: dict[str, Any]) -> None:
 async def evaluate_carbon_alert() -> dict[str, Any] | None:
     settings = get_settings()
     webhook_url = (settings.get("alert_webhook_url") or "").strip()
-    if not webhook_url:
-        return None
 
     enabled = str(settings.get("alert_webhook_enabled") or "true").lower()
     if enabled in ("0", "false", "no"):
@@ -89,5 +109,13 @@ async def evaluate_carbon_alert() -> dict[str, Any] | None:
         "service": "gridpulse",
     }
 
-    await post_webhook(webhook_url, format_gridpulse_carbon_alert_text(payload), payload)
+    text = format_gridpulse_carbon_alert_text(payload)
+    _persist_carbon_alert(payload, text)
+
+    if webhook_url:
+        try:
+            await post_webhook(webhook_url, text, payload)
+        except Exception as exc:
+            print(f"[gridpulse] alert webhook error: {exc}")
+
     return {"fired": True, **payload}
