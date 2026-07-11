@@ -40,17 +40,20 @@ def get_carbon(hours: int = Query(default=24, ge=1, le=168)) -> dict[str, Any]:
 
 
 @router.get("/forecasts")
-def get_forecasts(metric: str = Query(default="carbon_intensity")) -> dict[str, Any]:
+def get_forecasts(
+    metric: str = Query(default="carbon_intensity"),
+    model: str = Query(default="moving_avg_24h"),
+) -> dict[str, Any]:
     client = get_supabase()
     response = (
         client.table("forecasts")
         .select("*")
         .eq("metric", metric)
-        .eq("model", "moving_avg_24h")
+        .eq("model", model)
         .order("forecast_for", desc=False)
         .execute()
     )
-    return {"forecasts": response.data or [], "metric": metric}
+    return {"forecasts": response.data or [], "metric": metric, "model": model}
 
 
 @router.get("/summary")

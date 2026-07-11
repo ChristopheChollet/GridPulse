@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import router as data_router
 from app.config import get_settings
+from app.forecast.ml_hourly import run_ml_carbon_forecast
 from app.forecast.moving_avg import run_carbon_forecast
 from app.ingest.runner import run_ingestion
 
@@ -49,16 +50,27 @@ def health() -> dict[str, str | bool]:
 async def ingest_run(x_ingest_secret: str | None = Header(default=None, alias="X-Ingest-Secret")) -> dict:
     _check_ingest_secret(x_ingest_secret)
     result = await run_ingestion()
-    forecast = {}
+    forecast: dict = {}
     if result.carbon_upserted > 0 or result.mix_upserted > 0:
         try:
             forecast = run_carbon_forecast()
         except Exception as exc:  # noqa: BLE001
             result.errors.append(f"forecast: {exc}")
+        try:
+            forecast["ml"] = run_ml_carbon_forecast()
+        except Exception as exc:  # noqa: BLE001
+            result.errors.append(f"ml_forecast: {exc}")
     return {"ingest": result.to_dict(), "forecast": forecast}
 
 
 @app.post("/forecast/run")
 def forecast_run(x_ingest_secret: str | None = Header(default=None, alias="X-Ingest-Secret")) -> dict:
     _check_ingest_secret(x_ingest_secret)
-    return run_carbon_forecast()
+    baseline = run_carbon_forecast()
+    ml: dict = {}
+    try:
+        ml = run_ml_carbon_forecast()
+    except Exception as exc:  # noqa: BLE001
+        ml = {"error": str(exc)}
+    # Additive: keep baseline keys at top level, ML nested under "ml".
+    return {**baseline, "ml": ml}
