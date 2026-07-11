@@ -157,44 +157,58 @@ export function MixStackChart({ points }: { points: MixPoint[] }) {
   );
 }
 
+type ForecastSeriesPoint = { forecast_for: string; value: number };
+
 export function ForecastChart({
   history,
   forecasts,
+  ml,
 }: {
   history: CarbonPoint[];
-  forecasts: { forecast_for: string; value: number }[];
+  forecasts: ForecastSeriesPoint[];
+  ml?: ForecastSeriesPoint[];
 }) {
   const lastHistory = history.at(-1);
-  const forecastSlice = forecasts.slice(0, 12);
+  const baseSlice = forecasts.slice(0, 12);
+  const mlSlice = (ml ?? []).slice(0, 12);
+  const hasMl = mlSlice.length > 0;
 
   const historyRows = history.map((p) => ({
     time: formatChartTime(p.recorded_at),
     actual: p.carbon_gco2_kwh,
-    predicted: null as number | null,
+    baseline: null as number | null,
+    mlPred: null as number | null,
   }));
 
+  // Bridge point: connect the last actual value to the first forecast of each series.
   const bridge =
-    lastHistory && forecastSlice[0]
+    lastHistory && baseSlice[0]
       ? [
           {
-            time: formatChartTime(forecastSlice[0].forecast_for),
+            time: formatChartTime(baseSlice[0].forecast_for),
             actual: lastHistory.carbon_gco2_kwh,
-            predicted: forecastSlice[0].value,
+            baseline: baseSlice[0].value,
+            mlPred: mlSlice[0]?.value ?? null,
           },
         ]
       : [];
 
-  const forecastRows = forecastSlice.slice(bridge.length ? 1 : 0).map((p) => ({
+  const startIdx = bridge.length ? 1 : 0;
+  // Baseline and ML share the same hourly forecast_for timestamps (index-aligned).
+  const forecastRows = baseSlice.slice(startIdx).map((p, i) => ({
     time: formatChartTime(p.forecast_for),
     actual: null as number | null,
-    predicted: p.value,
+    baseline: p.value,
+    mlPred: mlSlice[startIdx + i]?.value ?? null,
   }));
 
   const data = [...historyRows, ...bridge, ...forecastRows];
 
   return (
     <div className="chart-card">
-      <h2 className="chart-title">Historique + prévision (moyenne mobile 24 h)</h2>
+      <h2 className="chart-title">
+        Historique + prévision{hasMl ? " — baseline vs ML" : " (moyenne mobile 24 h)"}
+      </h2>
       <div className="chart-body">
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={data}>
@@ -225,19 +239,33 @@ export function ForecastChart({
             />
             <Line
               type="monotone"
-              dataKey="predicted"
-              name="Prévision"
-              stroke="#0891b2"
+              dataKey="baseline"
+              name="Baseline (moy. mobile)"
+              stroke="#94a3b8"
               strokeWidth={2}
               strokeDasharray="6 4"
               dot={false}
               connectNulls={false}
             />
+            {hasMl ? (
+              <Line
+                type="monotone"
+                dataKey="mlPred"
+                name="ML (cycle horaire)"
+                stroke="#7c3aed"
+                strokeWidth={2}
+                strokeDasharray="4 3"
+                dot={false}
+                connectNulls={false}
+              />
+            ) : null}
           </LineChart>
         </ResponsiveContainer>
       </div>
       <p className="chart-caption">
-        Baseline pédagogique — pas un modèle opérationnel RTE.
+        {hasMl
+          ? "ML = Ridge sur features horaires (cycle journalier) vs baseline plate — pédagogique, pas un modèle opérationnel RTE."
+          : "Baseline pédagogique — pas un modèle opérationnel RTE."}
       </p>
     </div>
   );

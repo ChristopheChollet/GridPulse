@@ -96,9 +96,12 @@ export function getCarbon(hours = 24) {
   return fetchJson<{ points: CarbonPoint[] }>(`/api/v1/carbon?hours=${hours}`);
 }
 
-export function getForecasts(metric = "carbon_intensity") {
+export function getForecasts(
+  metric = "carbon_intensity",
+  model = "moving_avg_24h",
+) {
   return fetchJson<{ forecasts: ForecastPoint[] }>(
-    `/api/v1/forecasts?metric=${metric}`,
+    `/api/v1/forecasts?metric=${metric}&model=${model}`,
   );
 }
 

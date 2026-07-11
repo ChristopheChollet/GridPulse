@@ -3,48 +3,61 @@ import { ForecastChart } from "@/components/EnergyCharts";
 import { ForecastIcon } from "@/components/ModuleIcons";
 import { PageHeader } from "@/components/PageHeader";
 import { StatGrid } from "@/components/StatGrid";
-import { getCarbon, getForecasts } from "@/lib/api";
+import { getCarbon, getForecasts, type CarbonPoint, type ForecastPoint } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
 export default async function ForecastPage() {
-  let carbonPoints: Awaited<ReturnType<typeof getCarbon>>["points"] = [];
-  let forecasts: Awaited<ReturnType<typeof getForecasts>>["forecasts"] = [];
+  let carbonPoints: CarbonPoint[] = [];
+  let forecasts: ForecastPoint[] = [];
+  let mlForecasts: ForecastPoint[] = [];
   let error: string | null = null;
 
   try {
-    [{ points: carbonPoints }, { forecasts }] = await Promise.all([
+    const [carbon, baseline] = await Promise.all([
       getCarbon(24),
-      getForecasts("carbon_intensity"),
+      getForecasts("carbon_intensity", "moving_avg_24h"),
     ]);
+    carbonPoints = carbon.points;
+    forecasts = baseline.forecasts;
   } catch (e) {
     error = e instanceof Error ? e.message : "Erreur API";
   }
 
+  // Modèle ML optionnel : présent après un run ; sinon on affiche juste la baseline.
+  try {
+    const ml = await getForecasts("carbon_intensity", "sklearn_hourly_v1");
+    mlForecasts = ml.forecasts;
+  } catch {
+    mlForecasts = [];
+  }
+
   const latestForecast = forecasts.at(-1)?.value ?? forecasts[0]?.value;
+  const latestMl = mlForecasts.at(-1)?.value ?? mlForecasts[0]?.value;
+  const hasMl = mlForecasts.length > 0;
 
   return (
     <div>
       <PageHeader
-        eyebrow="Baseline ML"
+        eyebrow="Baseline + ML"
         title="Prévision carbone"
-        description="Moyenne mobile 24 h sur l'intensité carbone — modèle pédagogique, pas opérationnel RTE."
+        description="Deux modèles sur l'intensité carbone : baseline moyenne mobile 24 h et modèle ML par cycle horaire — pédagogiques, pas opérationnels RTE."
         accent="#7c3aed"
         icon={<ForecastIcon />}
       />
 
       <div className="disclaimer-card">
         <p className="text-sm text-secondary">
-          <strong className="text-primary">Baseline pédagogique</strong> — cette prévision
-          n&apos;est pas un modèle météo/production RTE. Elle illustre un pipeline
-          data et une prévision simple sur séries temporelles.
+          <strong className="text-primary">Baseline vs ML</strong> — la baseline est une moyenne
+          mobile plate ; le modèle ML (Ridge sur features horaires) apprend le cycle journalier du
+          carbone. Comparaison pédagogique, pas un modèle météo/production RTE.
         </p>
       </div>
 
       {error ? (
         <ApiErrorState
           className="mb-8 mt-6"
-          hint="Vérifiez que le backend FastAPI expose /forecast, puis exécutez POST /ingest/run."
+          hint="Vérifiez que le backend FastAPI expose /forecast, puis exécutez POST /forecast/run."
           detail={error}
         />
       ) : null}
@@ -54,10 +67,16 @@ export default async function ForecastPage() {
           <StatGrid
             items={[
               {
-                label: "Prévision 12 h",
+                label: "Baseline 12 h",
                 value: `${latestForecast} gCO₂/kWh`,
                 hint: "Modèle moving_avg_24h",
                 tone: latestForecast < 80 ? "ok" : "default",
+              },
+              {
+                label: "ML 12 h",
+                value: hasMl && latestMl != null ? `${latestMl} gCO₂/kWh` : "—",
+                hint: hasMl ? "Modèle sklearn_hourly_v1" : "En attente d'un run /forecast",
+                tone: hasMl && latestMl != null && latestMl < 80 ? "ok" : "default",
               },
               {
                 label: "Horizon",
@@ -71,7 +90,11 @@ export default async function ForecastPage() {
 
       {carbonPoints.length > 0 && forecasts.length > 0 ? (
         <div className="mt-8">
-          <ForecastChart history={carbonPoints} forecasts={forecasts} />
+          <ForecastChart
+            history={carbonPoints}
+            forecasts={forecasts}
+            ml={mlForecasts}
+          />
         </div>
       ) : !error ? (
         <div className="empty-state mt-8">
