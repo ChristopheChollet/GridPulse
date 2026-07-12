@@ -58,6 +58,7 @@ export default async function DashboardPage() {
       {error ? <ApiErrorState detail={error} /> : null}
 
       {summary ? (
+        <div data-tour="dashboard-kpis">
         <StatGrid
           items={[
             {
@@ -91,11 +92,16 @@ export default async function DashboardPage() {
             },
           ]}
         />
+        </div>
       ) : null}
 
       {hasData ? (
         <div className="mt-8 space-y-6">
-          {greenWindows ? <GreenWindowCard data={greenWindows} /> : null}
+          {greenWindows ? (
+            <div data-tour="green-window">
+              <GreenWindowCard data={greenWindows} />
+            </div>
+          ) : null}
           {carbonPoints.length > 0 ? (
             <section aria-labelledby="carbon-chart-title">
               <CarbonChart points={carbonPoints} />

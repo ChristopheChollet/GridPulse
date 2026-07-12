@@ -1,11 +1,15 @@
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+import sentry_sdk
 
 from app.api.routes import router as data_router
 from app.config import get_settings
 from app.forecast.ml_hourly import run_ml_carbon_forecast
 from app.forecast.moving_avg import run_carbon_forecast
 from app.ingest.runner import run_ingestion
+from app.sentry_init import init_sentry
+
+init_sentry()
 
 app = FastAPI(
     title="GridPulse API",
@@ -56,10 +60,12 @@ async def ingest_run(x_ingest_secret: str | None = Header(default=None, alias="X
             forecast = run_carbon_forecast()
         except Exception as exc:  # noqa: BLE001
             result.errors.append(f"forecast: {exc}")
+            sentry_sdk.capture_exception(exc)
         try:
             forecast["ml"] = run_ml_carbon_forecast()
         except Exception as exc:  # noqa: BLE001
             result.errors.append(f"ml_forecast: {exc}")
+            sentry_sdk.capture_exception(exc)
     return {"ingest": result.to_dict(), "forecast": forecast}
 
 
@@ -72,5 +78,6 @@ def forecast_run(x_ingest_secret: str | None = Header(default=None, alias="X-Ing
         ml = run_ml_carbon_forecast()
     except Exception as exc:  # noqa: BLE001
         ml = {"error": str(exc)}
+        sentry_sdk.capture_exception(exc)
     # Additive: keep baseline keys at top level, ML nested under "ml".
     return {**baseline, "ml": ml}

@@ -790,3 +790,26 @@ h1.landing-title .landing-title-accent {
   font-size: 1.25rem;
   text-align: center;
 }
+
+.tour-fallback-banner {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  z-index: 100000;
+  max-width: 28rem;
+  transform: translateX(-50%);
+  border-radius: 0.5rem;
+  border: 1px solid var(--surface-border);
+  background: var(--surface);
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 12%);
+}
+
+.tour-fallback-link {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  color: var(--accent-cyan);
+}

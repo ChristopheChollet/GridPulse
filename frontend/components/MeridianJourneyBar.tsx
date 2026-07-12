@@ -17,7 +17,7 @@ export function MeridianJourneyBar({ current }: { current: StepId }) {
   };
 
   return (
-    <nav className="journey-bar" aria-label="Parcours Meridian">
+    <nav className="journey-bar" aria-label="Parcours Meridian" data-tour="journey-bar">
       <ol className="journey-bar-list">
         {STEP_ORDER.map((step, index) => {
           const isCurrent = step.id === current;
