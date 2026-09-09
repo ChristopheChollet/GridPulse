@@ -113,7 +113,7 @@ export default async function DashboardPage() {
             </section>
           ) : null}
         </div>
-      ) : !error ? (
+      ) : !error && !summary?.mix_recorded_at && !summary?.carbon_recorded_at ? (
         <div className="empty-state mt-8">
           <p>Aucune donnée en base — lancez une ingestion.</p>
         </div>
